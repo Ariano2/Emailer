@@ -1,0 +1,472 @@
+import mysql.connector
+
+con=mysql.connector.connect(host="localhost",user="root",
+password="1234",database="email")
+
+cur=con.cursor(buffered=True)
+
+def showinterests():
+
+data=cur.execute("SELECT * FROM Interests",multi=True)
+
+if cur.rowcount==0:
+
+return None
+
+else:
+
+return data
+
+def addinterests():
+
+data=showinterests()
+
+if data==None:
+
+print(" NO PRE EXISTING INTERESTS ARE THERE (ADD SOME TO RUN THE PROGRAM) \n")
+
+else:
+
+print(" PRE EXISTING INTERESTS ARE \n")
+
+for i in data:
+
+print(i.fetchall())
+
+print()
+
+y="y"
+
+while y=="y":
+
+query="INSERT INTO Interests(Iname,Website) VALUES('{}','{}')".format(input("enter the name of the interest"),input("enter a URL for interest related website"))
+
+cur.execute(query)
+
+con.commit()
+
+y=input("enter y to continue or n to stop adding interests")
+
+data=showinterests()
+
+for i in data:
+
+print(i.fetchall())
+
+print()
+
+def deleteinterests():
+
+data=showinterests()
+
+if data==None:
+
+print(" NO PRE EXISTING INTERESTS ARE THERE FOR DELETION \n")
+
+else:
+
+print(" PRE EXISTING INTERESTS ARE \n")
+
+for i in data:
+
+print(i.fetchall())
+
+print()
+
+k=input("enter 1 to delete all interests or 2 to delete a specific interest")
+
+if k=='1':
+
+query="DELETE FROM Interests"
+
+cur.execute(query)
+
+con.commit()
+
+else:
+
+y="y"
+
+while y=="y":
+
+query="DELETE FROM Interests WHERE Ino={}".format(int(input("enter number of the record to be deleted")))
+
+cur.execute(query)
+
+con.commit()
+
+data=showinterests()
+
+for i in data:
+
+print(i.fetchall())
+
+print()
+
+y=input("enter y to continue deleting or n to stop deleting interests")
+
+def updateinterests():
+
+data=showinterests()
+
+if data==None:
+
+print(" NO PRE EXISTING INTERESTS ARE THERE \n")
+
+else:
+
+print(" PRE EXISTING INTERESTS ARE \n")
+
+for i in data:
+
+print(i.fetchall())
+
+print()
+
+y="y"
+
+while y=="y":
+
+k=int(input("enter value of interest which has to be updated"))
+
+query="UPDATE Interests SET Iname='{}' WHERE Ino={}".format(input("enter new name of interest"),k)
+
+cur.execute(query)
+
+con.commit()
+
+query="UPDATE Interests SET Website='{}' WHERE Ino={}".format(input("enter new URL of website"),k)
+
+cur.execute(query)
+
+con.commit()
+
+data=showinterests()
+
+for i in data:
+
+print(i.fetchall())
+
+print()
+
+y=input("enter y to continue updating or n to stop")
+
+def showuser():
+
+data=cur.execute("SELECT * FROM User",multi=True)
+
+if cur.rowcount==0:
+
+return None
+
+else:
+
+return data
+
+def adduser():
+
+data=showuser()
+
+if data==None:
+
+print(" NO PRE EXISTING USERS \n")
+
+else:
+
+print(" PRE EXISTING USERS ARE \n")
+
+for i in data:
+
+print(i.fetchall())
+
+print()
+
+print("POSSIBLE INTERESTS ARE \n")
+
+data=showinterests()
+
+for i in data:
+
+print(i.fetchall())
+
+print()
+
+y="y"
+
+while y=="y":
+
+query="INSERT INTO User(Name,Email,Ino) VALUES('{}','{}',{})".format(input("enter the name of the person"),input("enter their email"),int(input("enter the interest number")))
+
+cur.execute(query)
+
+con.commit()
+
+y=input("enter y to continue or n to stop adding interests")
+
+data=showuser()
+
+for i in data:
+
+print(i.fetchall())
+
+print()
+
+def deleteuser():
+
+data=showuser()
+
+if data==None:
+
+print(" NO PRE EXISTING USERS ARE THERE FOR DELETION \n")
+
+else:
+
+print(" PRE EXISTING USERS ARE \n")
+
+for i in data:
+
+print(i.fetchall())
+
+print()
+
+k=input("enter 1 to delete all users or 2 to delete a specific user's details")
+
+if k=='1':
+
+query="DELETE FROM User"
+
+cur.execute(query)
+
+con.commit()
+
+else:
+
+y="y"
+
+while y=="y":
+
+query="DELETE FROM User WHERE Sno={}".format(int(input("enter number of the record to be deleted")))
+
+cur.execute(query)
+
+con.commit()
+
+data=showuser()
+
+for i in data:
+
+print(i.fetchall())
+
+print()
+
+y=input("enter y to continue deleting or n to stop deleting user details")
+
+def updateuser():
+
+data=showuser()
+
+if data==None:
+
+print(" NO PRE EXISTING USERS ARE THERE \n")
+
+else:
+
+print(" PRE EXISTING USERS ARE \n")
+
+for i in data:
+
+print(i.fetchall())
+
+print()
+
+y="y"
+
+data=showinterests()
+
+if data==None:
+
+print(" NO PRE EXISTING INTERESTS ARE THERE (ADD SOME TO RUN THE PROGRAM) \n")
+
+else:
+
+print(" PRE EXISTING INTERESTS ARE \n")
+
+for i in data:
+
+print(i.fetchall())
+
+print()
+P.T.O
+
+while y=="y":
+
+k=int(input("enter serial number of user which has to be updated"))
+
+query="UPDATE User SET Name='{}' WHERE Sno={}".format(input("enter new
+name of the user"),k)
+
+cur.execute(query)
+
+con.commit()
+
+query="UPDATE User SET Email='{}' WHERE Sno={}".format(input("enter new email of user"),k)
+
+cur.execute(query)
+
+con.commit()
+
+query="UPDATE User SET Ino='{}' WHERE Sno={}".format(input("enter new interest ID of user"),k)
+
+cur.execute(query)
+
+con.commit()
+
+data=showuser()
+
+for i in data:
+
+print(i.fetchall())
+
+print()
+
+y=input("enter y to continue updating or press n to stop")
+
+def equijoinandmailing():
+
+import smtplib
+
+smtpobj=smtplib.SMTP("smtp.gmail.com",587)
+
+smtpobj.ehlo()
+
+smtpobj.starttls()
+
+smtpobj.login("aryangosain2@gmail.com",“mypasssword")
+
+query="SELECT Name,Email,Iname,Website from User NATURAL JOIN Interests"
+
+cur.execute(query)
+
+con.commit()
+
+data=cur.fetchall()
+
+for i in data:
+
+message="Subject:Check this out!\n "+i[0]+", we have noticed your interest in"+i[2]+". We would like to recommend this website to you !!! "+i[3]+". Make sure to check it out, have a nice day ahead."
+
+smtpobj.sendmail("aryangosain2@gmail.com",i[1],message)
+
+print("mails sent successfully")
+
+smtpobj.quit()
+
+‘’’Note – smtpobject.login requires the actual password of an email which has been
+avoided here for the sake of security.’’’
+
+def statistics():
+
+query="SELECT Iname,COUNT(Ino) FROM Interests NATURAL JOIN User GROUP
+BY Iname;"
+
+cur.execute(query)
+
+con.commit()
+
+data=cur.fetchall()
+
+for i in data:
+
+print("INTEREST : ",i[0]," ",end='')
+
+print("Number of users with the interest : ",i[1])
+
+# MAIN MENU
+
+def menu():
+
+def check():
+
+data1=showinterests()
+
+if data1==None:
+
+print("There are no interests, to use the program properly add interests!")
+
+else:
+
+print("the interests currently are : ")
+
+for i in data1:
+
+print(i.fetchall())
+
+print()
+
+data2=showuser()
+
+if data2==None:
+
+print("There are no users, to use the program properly add users!")
+
+else:
+
+print("the users currently are : ")
+
+for j in data2:
+
+print(j.fetchall())
+
+print()
+
+def options():
+
+k=input("enter 1 to add interests \nenter 2 to modify interests \nenter 3 to delete interests \nenter 4 to add users \nenter 5 to update users \nenter 6 to delete users \nenter 7 to send emails to all users \nenter 8 to view statistics")
+
+if k=="1":
+
+addinterests()
+
+elif k=="2":
+
+updateinterests()
+
+elif k=="3":
+
+deleteinterests()
+
+elif k=="4":
+
+adduser()
+
+elif k=="5":
+
+updateuser()
+
+elif k=="6":
+
+deleteuser()
+
+elif k=="7":
+
+equijoinandmailing()
+
+elif k=="8":
+
+statistics()
+
+else:
+
+print("wrong input given please try again")
+
+check()
+
+m="y"
+
+while m=="y":
+
+options()
+
+m=input("enter y to keep performing other actions")
+
+menu()
